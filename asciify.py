@@ -9,6 +9,9 @@ def to_chars(im, args):
 
         returns a list of rows
     """
+    # ensure this is single channel (greyscale)
+    im = im.convert('L')
+
     # aspect ratio of a character when its displayed 
     # (they aren't perfect squares like pixels)
     # height / width
@@ -22,7 +25,7 @@ def to_chars(im, args):
 
     # tonemap so darkest char for min_lum
     #       and lightest char for max_lum
-    min_lum, max_lum = greyscale.getextrema()
+    min_lum, max_lum = im.getextrema()
 
     pixels = list(downscaled.getdata())
 
@@ -55,6 +58,8 @@ def to_chars_superpixels(im, args):
 
         returns a list of rows
     """
+    # ensure this is single channel greyscale
+    im = im.convert('L')
 
     # samples per pixel (ratio of these is assumed char aspect ratio)
     # 2,4 for full 8 dot braille, or 2,3 for 6 dot braille
@@ -74,7 +79,7 @@ def to_chars_superpixels(im, args):
 
     # tonemap so darkest char for min_lum
     #       and lightest char for max_lum
-    min_lum, max_lum = greyscale.getextrema()
+    min_lum, max_lum = im.getextrema()
 
     pixels = list(downscaled.getdata())
 
@@ -172,13 +177,10 @@ if __name__ == '__main__':
         im = Image.alpha_composite(background_image, im)
         im.convert('RGB')
 
-    # convert RGB -> Luminosity
-    greyscale = im.convert('L')
-
     if args.dots:
-        rows = to_chars_superpixels(greyscale, args)
+        rows = to_chars_superpixels(im, args)
     else:
-        rows = to_chars(greyscale, args)
+        rows = to_chars(im, args)
 
     if args.output_path is None:
         for row in rows:
