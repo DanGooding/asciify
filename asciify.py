@@ -25,7 +25,7 @@ def to_chars(im, args):
 
     # tonemap so darkest char for min_lum
     #       and lightest char for max_lum
-    min_lum, max_lum = im.getextrema()
+    min_lum, max_lum = downscaled.getextrema()
 
     pixels = list(downscaled.getdata())
 
@@ -71,15 +71,15 @@ def to_chars_superpixels(im, args):
     subpixel_width = im.width / (pixels_across * horiz_samples)
     pixels_down = im.height / (subpixel_width * vert_samples) # may not be an integer
 
-    downscaled = im.resize(
-        (int(pixels_across * horiz_samples), 
+    downscaled = im.resize((
+        int(pixels_across * horiz_samples), 
         int(pixels_down * vert_samples)))
 
     pixels_down = ceil(pixels_down)
 
     # tonemap so darkest char for min_lum
     #       and lightest char for max_lum
-    min_lum, max_lum = im.getextrema()
+    min_lum, max_lum = downscaled.getextrema()
 
     pixels = list(downscaled.getdata())
 
